@@ -41,7 +41,7 @@ export default function Dashboard() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ status }),
+      body: JSON.stringify({ status,role: "operator" }),
     });
 
     await loadEvents();
