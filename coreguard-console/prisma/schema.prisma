@@ -1,0 +1,72 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url = env("DATABASE_URL")
+}
+
+model RiskEvent {
+  id             String   @id @default(cuid())
+  supplier       String
+  part           String
+  severity       String
+  status         String
+  owner          String
+  summary        String
+  detectedAt     DateTime
+  source         String
+  recommendedAction String
+
+  evidence       Evidence[]
+  notes          Note[]
+  audits         AuditLog[]
+  timelines      Timeline[]
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Evidence {
+  id          String   @id @default(cuid())
+  eventId     String
+  title       String
+  text        String
+  link        String
+  createdAt   DateTime @default(now())
+
+  event       RiskEvent @relation(fields: [eventId], references: [id])
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  eventId   String
+  author    String
+  text      String
+  createdAt DateTime @default(now())
+
+  event     RiskEvent @relation(fields: [eventId], references: [id])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  eventId   String
+  actor     String
+  field     String
+  oldValue  String?
+  newValue  String?
+  createdAt DateTime @default(now())
+
+  event     RiskEvent @relation(fields: [eventId], references: [id])
+}
+
+model Timeline {
+  id        String   @id @default(cuid())
+  eventId   String
+  title     String
+  detail    String
+  createdAt DateTime @default(now())
+
+  event     RiskEvent @relation(fields: [eventId], references: [id])
+}
