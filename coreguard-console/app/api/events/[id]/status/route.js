@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
 export async function PATCH(req, context) {
     const params = await context.params;
   try {
